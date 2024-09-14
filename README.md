@@ -3,8 +3,8 @@
 **Contributors:** sajjad67 \
 **Tags:** credit-card, securionpay, payment gateway, payments, woocommerce, woo, woocommerce-payment-gateway, woo-gateway , secure-payment \
 **Requires at least:** 5.6 \
-**Tested up to:** 6.0 \
-**Stable tag:** 1.0.1 \
+**Tested up to:** 6.6 \
+**Stable tag:** 1.0.3 \
 **License:** GPLv2 \
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -64,9 +64,15 @@ Can be found here <a href="https://securionpay.com/account-settings#api-keys">AP
 
 ## Changelog
 
-### 1.0.0
+### 1.0.3
+- Compatibility check for wp 6.6
 
-- Compatibility check for wp 6.0.
+### 1.0.2
+- Compatibility check for wp 6.3
+
+### 1.0.1
+
+- Compatibility check for wp 6.0
 ### 1.0.0
 
 - Initial release.

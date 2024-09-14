@@ -3,7 +3,7 @@
  * Plugin Name: Payment Gateway for Woocommerce - SecurionPay
  * Author: Sajjad Hossain Sagor
  * Description: Integrate SecurionPay payment gateway to your Woocommerce Powered store.
- * Version: 1.0.1
+ * Version: 1.0.3
  * Author URI: http://sajjadhsagor.com
  * Text Domain: woo-securionpay
  * Domain Path: languages
@@ -58,7 +58,7 @@ add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), function( $lin
 	$plugin_links = array( '<a href="' . admin_url( 'admin.php?page=wc-settings&tab=checkout&section=woo_securionpay_gateway' ) . '">' . __( 'Settings', 'woo-securionpay' ) . '</a>' );
 
 	return array_merge( $plugin_links, $links );
-});
+} );
 	
 
 /*
@@ -91,7 +91,7 @@ add_action( 'admin_notices', function()
 	{	
 		echo '<div class="error"><p>' . sprintf( __( 'Securionpay is enabled, but the <a href="%s">force SSL option</a> is disabled; your checkout may not be secure! Please enable SSL and ensure your server has a valid SSL certificate.', 'woo-securionpay'), admin_url( 'admin.php?page=wc-settings&tab=advanced' ) ) . '</p></div>';
 	}
-});
+} );
 
 /**
  * woo_securionpay_get_card_type function

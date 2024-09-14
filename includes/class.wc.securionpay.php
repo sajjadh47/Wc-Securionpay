@@ -19,16 +19,16 @@ add_action( 'plugins_loaded', 'wc_securionpay_gateway_init', 11 );
 
 function wc_securionpay_gateway_init()
 {
-    class WC_Securionpay_Gateway extends WC_Payment_Gateway_CC
-    {
-        public function __construct()
-        {
+	class WC_Securionpay_Gateway extends WC_Payment_Gateway_CC
+	{
+		public function __construct()
+		{
 			$this->id = WOO_SECURIONPAY_GATEWAY; // payment gateway plugin ID
 			$this->icon = WOO_SECURIONPAY_ROOT_URL . 'assets/logo.png'; // URL of the icon that will be displayed on checkout page near your gateway name
 			$this->has_fields = true; // in case you need a custom credit card form
 			$this->method_title = 'SecurionPay';
 			$this->method_description = 'Integrate SecurionPay payment gateway to your Woocommerce Powered store.'; // will be displayed on the options page
-		 	$this->cardtypes = $this->get_option( 'cardtypes' );
+			$this->cardtypes = $this->get_option( 'cardtypes' );
 			
 			// gateways supports simple payments, refunds & saved payment methods
 			$this->supports = array(
@@ -49,8 +49,8 @@ function wc_securionpay_gateway_init()
 			$this->enabled = $this->get_option( 'enabled' );
 			$this->sandbox = 'yes' === $this->get_option( 'sandbox' );
 			$this->secret_key = $this->sandbox ? $this->get_option( 'sandbox_secret_key' ) : $this->get_option( 'secret_key' );
-		 	
-		 	// Add test mode warning if sandbox
+			
+			// Add test mode warning if sandbox
 			if ( $this->sandbox == 'yes' )
 			{
 				$this->description  = trim( $this->description );
@@ -197,16 +197,16 @@ function wc_securionpay_gateway_init()
 			$exp_date    = $exp_month . substr( $exp_year, -2 );
 
 			$user_card =  array(
-		        'number' 	=> $card_number,
-		        'cvc' 		=> intval( sanitize_text_field( $_POST['woo_securionpay_gateway-card-cvc'] ) ),
-		        'expMonth'  => $exp_month,
-		        'expYear'   => $exp_year
+				'number' 	=> $card_number,
+				'cvc' 		=> intval( sanitize_text_field( $_POST['woo_securionpay_gateway-card-cvc'] ) ),
+				'expMonth'  => $exp_month,
+				'expYear'   => $exp_year
 			);
 
 			// make up the data to send to Gateway API
 			$request = array(
-			    'email' => $email,
-			    'card'  => $user_card
+				'email' => $email,
+				'card'  => $user_card
 			);
 
 			// check if customer is already exists
@@ -223,18 +223,18 @@ function wc_securionpay_gateway_init()
 
 					// make up the data to send to Gateway API
 					$update_customer = array(
-					    'customerId' => $customerID,
-					    'card' => $user_card
+						'customerId' => $customerID,
+						'card' => $user_card
 					);
 					
 					$customer = $gateway->updateCustomer( $update_customer );
 
 					$token = new WC_Payment_Token_CC();
 
-				    $last_inserted_card = array_pop( $customer->getCards() );
+					$last_inserted_card = array_pop( $customer->getCards() );
 
-				    // charge id will be used as TransactionID for reference
-		    		$cardToken = $last_inserted_card->getId();
+					// charge id will be used as TransactionID for reference
+					$cardToken = $last_inserted_card->getId();
 					
 					$token->set_token( $cardToken );
 					$token->set_gateway_id( WOO_SECURIONPAY_GATEWAY );
@@ -252,10 +252,10 @@ function wc_securionpay_gateway_init()
 					//something went wrong buddy!
 
 					// handle error response - see https://securionpay.com/docs/api#error-object
-				    $errorMessage = $e->getMessage();
+					$errorMessage = $e->getMessage();
 
-				    if ( ! empty( $errorMessage ) )
-				    {
+					if ( ! empty( $errorMessage ) )
+					{
 						$error_msg = __( 'Error adding card : ', 'woo-securionpay' ) . $errorMessaget;
 					}
 					else
@@ -271,17 +271,17 @@ function wc_securionpay_gateway_init()
 				// request for new customer creation
 				try
 				{
-				    // do something with customer object - see https://securionpay.com/docs/api#customer-object
-				    $customer = $gateway->createCustomer( $request );
+					// do something with customer object - see https://securionpay.com/docs/api#customer-object
+					$customer = $gateway->createCustomer( $request );
 
-				    $customer_id = update_user_meta( get_current_user_id(), '_cust_id', $customer->getId() );
+					$customer_id = update_user_meta( get_current_user_id(), '_cust_id', $customer->getId() );
 
-				    $token = new WC_Payment_Token_CC();
+					$token = new WC_Payment_Token_CC();
 
-				    $last_inserted_card = array_pop( $customer->getCards() );
+					$last_inserted_card = array_pop( $customer->getCards() );
 
-				    // charge id will be used as TransactionID for reference
-		    		$cardToken = $last_inserted_card->getId();
+					// charge id will be used as TransactionID for reference
+					$cardToken = $last_inserted_card->getId();
 					
 					$token->set_token( $cardToken );
 					$token->set_gateway_id( WOO_SECURIONPAY_GATEWAY );
@@ -297,12 +297,12 @@ function wc_securionpay_gateway_init()
 				catch ( SecurionPayException $e )
 				{
 					//something went wrong buddy!
-				    
-				    // handle error response - see https://securionpay.com/docs/api#error-object
-				    $errorMessage = $e->getMessage();
+					
+					// handle error response - see https://securionpay.com/docs/api#error-object
+					$errorMessage = $e->getMessage();
 
-				    if ( ! empty( $errorMessage ) )
-				    {
+					if ( ! empty( $errorMessage ) )
+					{
 						$error_msg = __( 'Error adding card : ', 'woo-securionpay' ) . $errorMessaget;
 					}
 					else
@@ -376,14 +376,14 @@ function wc_securionpay_gateway_init()
 
 			// make up the data to send to Gateway API
 			$request = array(
-			    'amount' => $amount,
-			    'currency' => get_option('woocommerce_currency'),
-			    'card' => array(
-			        'number' 		 => str_replace( ' ', '', sanitize_text_field( $_POST['woo_securionpay_gateway-card-number'] ) ),
-			        'cvc' 		 	 => intval( $_POST['woo_securionpay_gateway-card-cvc'] ),
-			        'expMonth' 		 => $exp_month,
-			        'expYear' 		 => $exp_year
-			    )
+				'amount' => $amount,
+				'currency' => get_option('woocommerce_currency'),
+				'card' => array(
+					'number' 		 => str_replace( ' ', '', sanitize_text_field( $_POST['woo_securionpay_gateway-card-number'] ) ),
+					'cvc' 		 	 => intval( $_POST['woo_securionpay_gateway-card-cvc'] ),
+					'expMonth' 		 => $exp_month,
+					'expYear' 		 => $exp_year
+				)
 			);
 				
 			if ( isset( $_POST['wc-woo_securionpay_gateway-payment-token'] ) && 'new' !== $_POST['wc-woo_securionpay_gateway-payment-token'] )
@@ -417,18 +417,18 @@ function wc_securionpay_gateway_init()
 			// go for it... charge the amount and see if it has any chance...
 			try
 			{    
-			    // the charge object after successfully charging a card
-			    // do something with charge object - see https://securionpay.com/docs/api#charge-object
-			    $charge = $gateway->createCharge( $request );
+				// the charge object after successfully charging a card
+				// do something with charge object - see https://securionpay.com/docs/api#charge-object
+				$charge = $gateway->createCharge( $request );
 
-			    // charge id will be used as TransactionID for reference
-	    		$chargeId = $charge->getId();
+				// charge id will be used as TransactionID for reference
+				$chargeId = $charge->getId();
 
-	    		$cardObj = $charge->getCard();
+				$cardObj = $charge->getCard();
 
-			    $order->payment_complete( $trans_id );
+				$order->payment_complete( $trans_id );
 
-			    $order->reduce_order_stock();
+				$order->reduce_order_stock();
 				
 				$woocommerce->cart->empty_cart();
 
@@ -517,16 +517,16 @@ function wc_securionpay_gateway_init()
 
 					// make up the data to send to Gateway API
 					$request = array(
-					    'chargeId' => $transaction_id,
-					    'amount' => intval( $amount )
+						'chargeId' => $transaction_id,
+						'amount' => intval( $amount )
 					);
 					
 					$refund = $gateway->refundCharge( $request );
 
-				    // do something with charge object - see https://securionpay.com/docs/api#charge-object
-				    $refundId = $refund->getId();
-				    
-				    $refunded_amount = number_format( $amount, '2', '.', '' );
+					// do something with charge object - see https://securionpay.com/docs/api#charge-object
+					$refundId = $refund->getId();
+					
+					$refunded_amount = number_format( $amount, '2', '.', '' );
 						
 					$order->add_order_note( sprintf( __( 'Securionpay refund completed for %s. Refund ID: %s', 'woo-securionpay' ), $refunded_amount, $refundId ) );
 					
@@ -558,5 +558,5 @@ function wc_securionpay_gateway_init()
 			return ' name="' . esc_attr( $this->id . '-' . $name ) . '" ';
 		}
 
-    } // end \WC_Securionpay_Gateway class
+	} // end \WC_Securionpay_Gateway class
 }
